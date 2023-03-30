@@ -1,0 +1,1 @@
+{'year': 493, 'manor_name': 'Cholderton', 'harvest_income': 1.0, 'raid_income': 7.0, 'total_investment_costs': 2.0, 'total_investment_income': 6.0, 'net_income': 12.0}, {'year': 494, 'manor_name': 'Cholderton', 'harvest_income': 2.0, 'raid_income': 3.0, 'total_investment_costs': 2.0, 'total_investment_income': 6.0, 'net_income': 12.0}
