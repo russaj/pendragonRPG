@@ -3,20 +3,20 @@ import os
 import csv
 import json
 
-# Define the function to calculate net income for a single manor
+# Net income for a single manor
 def calculate_net_income(year, manor_name, harvest_income, raid_income, investments):
     total_investment_costs = 0
     total_investment_income = 0
 
-    # Calculate the total investment costs and income
+    # Total investment costs and income
     for investment in investments:
         total_investment_costs += investment["annual_cost"]
         total_investment_income += random.randint(1, investment["dice_size"]) * investment["annual_income_per_unit"]
 
-    # Calculate the net income
+    # Total Net income
     net_income = harvest_income + raid_income + total_investment_income - total_investment_costs
 
-    # Create a dictionary to store the results
+    # Store the results
     results = {
         "year": year,
         "manor_name": manor_name,
@@ -27,7 +27,7 @@ def calculate_net_income(year, manor_name, harvest_income, raid_income, investme
         "net_income": net_income
     }
 
-    # Save the results to a file
+    # Create Python File
     filename = manor_name + ".py"
     try:
         with open(filename, "a") as f:
@@ -37,7 +37,7 @@ def calculate_net_income(year, manor_name, harvest_income, raid_income, investme
             f.write(str(results))
     return results
 
-# Write the results to a CSV file
+# Create CSV file
     fieldnames = ["year", "manor_name", "harvest_income", "raid_income", "total_investment_costs", "total_investment_income", "net_income"]
     if os.path.exists(filename + ".csv"):
         with open(filename + ".csv", "a", newline="") as f:
@@ -49,7 +49,7 @@ def calculate_net_income(year, manor_name, harvest_income, raid_income, investme
             writer.writeheader()
             writer.writerow(results)
 
-    # Write the results to a JSON file
+# Create Write the results to a JSON file
     if os.path.exists(filename + ".json"):
         with open(filename + ".json", "a") as f:
             json.dump(results, f)
@@ -57,7 +57,7 @@ def calculate_net_income(year, manor_name, harvest_income, raid_income, investme
         with open(filename + ".json", "w") as f:
             json.dump(results, f)
 
-# Define a function to get user input for a single investment
+# user input for a single investment
 def get_investment():
     while True:
         try:
@@ -76,7 +76,7 @@ def get_investment():
     }
     return investment
 
-# Define a function to get user input for multiple investments
+# user input for multiple investments
 def get_investments():
     investments = []
     while True:
@@ -87,7 +87,7 @@ def get_investments():
         investments.append(investment)
     return investments
 
-# Get user input for the year, manor name, and income sources
+# User input for the year, manor name, and income sources
 while True:
     try:
         year = int(input("Enter the year: "))
@@ -117,7 +117,7 @@ while True:
     if add_manor.lower() == "n":
         break
 
-# Calculate net income for each manor and store results in a list of dictionaries
+# Net income for each manor and store results in a list of dictionaries
 results = []
 for manor in manors:
     result = calculate_net_income(year, manor["manor_name"], manor["harvest_income"], manor["raid_income"], manor["investments"])
