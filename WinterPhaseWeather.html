@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendragon Battle Simulation</title>
+</head>
+<body>
+    <h1>Pendragon Battle Simulation</h1>
+    <button id="startButton">Start</button>
+
+    <div id="inputSection" style="display:none;">
+        <label for="stewardNumber">Enter your Steward score:</label>
+        <input type="number" id="stewardNumber">
+        <p>Did any of the following happen to your manor?</p>
+        <input type="radio" id="none" name="event" value="none">
+        <label for="none">None</label><br>
+        <input type="radio" id="raid" name="event" value="raid">
+        <label for="raid">Raid</label><br>
+        <input type="radio" id="pillage" name="event" value="pillage">
+        <label for="pillage">Pillage</label><br>
+        <input type="radio" id="plunder" name="event" value="plunder">
+        <label for="plunder">Plunder</label><br>
+        <button id="submitButton">Submit</button>
+    </div>
+
+    <div id="dvSection" style="display:none;">
+        <label for="dv">What is the DV score of your manor?</label>
+        <input type="number" id="dv">
+        <button id="calculateButton">Calculate</button>
+    </div>
+
+    <div id="resultSection" style="display:none;">
+        <p id="result"></p>
+    </div>
+
+    <script>
+        document.getElementById('startButton').addEventListener('click', function() {
+            // Step 2: Generate two random numbers from 1 to 20
+            let firstNumber = Math.floor(Math.random() * 20) + 1;
+            let secondNumber = Math.floor(Math.random() * 20) + 1;
+            let weather;
+
+            // Step 3: Determine the Weather variable
+            if (firstNumber === 20) {
+                weather = 'Fumble';
+            } else if (firstNumber < secondNumber) {
+                weather = 'Success';
+            } else if (firstNumber > secondNumber) {
+                weather = 'Failure';
+            } else if (firstNumber === secondNumber) {
+                weather = 'Critical';
+            }
+
+            console.log(`First Number: ${firstNumber}, Second Number: ${secondNumber}, Weather: ${weather}`);
+
+            // Show the input section
+            document.getElementById('inputSection').style.display = 'block';
+        });
+
+        document.getElementById('submitButton').addEventListener('click', function() {
+            // Step 4: Get steward score input
+            let stewardNumber = parseInt(document.getElementById('stewardNumber').value);
+
+            // Step 5: Check for manor event
+            let event = document.querySelector('input[name="event"]:checked').value;
+            let dv = 0;
+
+            if (event !== 'none') {
+                // Show DV input section
+                document.getElementById('dvSection').style.display = 'block';
+            } else {
+                // Proceed with DV as 0
+                calculateResults(stewardNumber, dv, event);
+            }
+        });
+
+        document.getElementById('calculateButton').addEventListener('click', function() {
+            // Get DV input
+            let dv = parseInt(document.getElementById('dv').value);
+            let stewardNumber = parseInt(document.getElementById('stewardNumber').value);
+            let event = document.querySelector('input[name="event"]:checked').value;
+
+            calculateResults(stewardNumber, dv, event);
+        });
+
+        function calculateResults(stewardNumber, dv, event) {
+            let eventValue = 0;
+
+            // Step 7: Determine event impact
+            if (event === 'raid') {
+                eventValue = Math.floor(Math.random() * 6) + 2;
+            } else if (event === 'pillage') {
+                eventValue = Math.floor(Math.random() * 6) + 7;
+            } else if (event === 'plunder') {
+                eventValue = Math.floor(Math.random() * 6) + Math.floor(Math.random() * 6) + 2;
+            }
+
+            dv = Math.max(0, eventValue - dv);
+
+            // Step 8: Subtract DV from stewardNumber
+            stewardNumber -= dv;
+
+            // Step 9: Generate a random number and compare with stewardNumber
+            let randomNum = Math.floor(Math.random() * 20) + 1;
+            let manorNumber;
+
+            if (randomNum === 20) {
+                manorNumber = 'Fumble';
+            } else if (randomNum < stewardNumber) {
+                manorNumber = 'Success';
+            } else if (randomNum > stewardNumber) {
+                manorNumber = 'Failure';
+            } else if (randomNum === stewardNumber) {
+                manorNumber = 'Critical';
+            }
+
+            console.log(`Steward Number: ${stewardNumber}, Random Number: ${randomNum}, Manor Number: ${manorNumber}`);
+
+            // Step 10: Compare manorNumber and Weather and print results
+            let resultText;
+            if (manorNumber === weather) {
+                resultText = 'Regular (1x)';
+            } else if (weather === 'Success' && manorNumber === 'Failure') {
+                resultText = 'Good (1.2x)';
+            } else if (weather === 'Critical' && manorNumber === 'Failure') {
+                resultText = 'Great (1.6x)';
+            } else if (weather === 'Critical' && manorNumber === 'Fumble') {
+                resultText = 'Exceptional (2x)';
+            } else if (weather === 'Critical' && manorNumber === 'Failure') {
+                resultText = 'Paltry (.4x)';
+            } else if (weather === 'Critical' && manorNumber === 'Fumble') {
+                resultText = 'Disaster (0)';
+            } else {
+                resultText = 'Meager (.8x)';
+            }
+
+            document.getElementById('result').innerText = resultText;
+            document.getElementById('resultSection').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
